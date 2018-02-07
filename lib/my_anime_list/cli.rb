@@ -1,6 +1,5 @@
 class MyAnimeList::CLI
 
-  @@url = "https://myanimelist.net/topanime.php"
 
   def call
     list_anime

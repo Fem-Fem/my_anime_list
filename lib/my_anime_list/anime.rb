@@ -3,18 +3,26 @@ require 'open-uri'
 class MyAnimeList::Anime
 
   @@all = []
+  @@url = "https://myanimelist.net/topanime.php"
 
   attr_accessor :name, :popularity, :rating, :description
 
   # https://myanimelist.net/topanime.php
 
 
-  def self.scrape_index_page(url)
-    html = open(url)
+  def self.scrape_index_page
+    html = open(@@url)
     doc = Nokogiri::HTML(html)
-    doc.css("div.ranking-list").each do |example|
+    hello = doc.css("div.ranking-list")
+    doc.css("div.information.di-ib.mt4").each do |example|
       hash = {}
-      hash.rank = example.css("div.text-on")
+      info = example.text.strip
+      parsed_info = info.split(/\n/)
+      hash[show_length] = parsed_info[0]
+      hash[time_aired] = parsed_info[1]
+      hash[members_watched] = parsed_info[2]
+      binding.pry
+      hash.rank = example.text
       @@all << hash
     end
 
