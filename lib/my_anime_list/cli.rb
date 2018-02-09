@@ -11,7 +11,7 @@ class MyAnimeList::CLI
     puts "Best anime:"
     @anime = MyAnimeList::Anime.today
     @anime.each.with_index(1) do |show, i|
-      puts "#{i}. #{show.name}; Show Popularity: #{show.popularity}; Show Rating: #{show.rating}"
+      puts "#{i}. #{show.name}; Show Popularity: #{show.members_watched}; Show Length: #{show.time_aired}; Show Length: #{show.show_length}"
     end
   end
 
