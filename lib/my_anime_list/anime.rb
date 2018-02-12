@@ -1,3 +1,4 @@
+require 'nokogiri'
 require 'open-uri'
 
 class MyAnimeList::Anime
@@ -6,17 +7,15 @@ class MyAnimeList::Anime
   @@objects = []
   @@url = "https://myanimelist.net/topanime.php"
 
-  attr_accessor :name, :show_length, :time_aired, :members_watched, :ranking, :url
+  attr_accessor :name, :show_length, :time_aired, :members_watched, :ranking, :url, :description
 
   # https://myanimelist.net/topanime.php
-
+  # https://myanimelist.net/anime/5114/Fullmetal_Alchemist__Brotherhood
 
   def self.scrape_index_page
     html = open(@@url)
     doc = Nokogiri::HTML(html)
-    #    hello = doc.css("div.ranking-list")
     #    doc.css("div.information.di-ib.mt4").each do |example|
-    #        doc.css("div.detail").each do |example|
     hello = doc.css("div.ranking-list")
     doc.css("div.detail").each do |example|
       hash = {}
@@ -37,39 +36,77 @@ class MyAnimeList::Anime
 
   end
 
-  # def self.scrape_profile
-  #
-  # end
+  def self.scrape_anime_page_profile(url)
+    #want genres, description
+    #for genres, prob need to determine based off of title and iterate through that list
+    #for description, need to understand how to interact with a class.
+    html = open(url)
+    doc = Nokogiri::HTML(html)
+    # name = doc.css("div.pb16 description").text
+    name = doc.at("//span[@itemprop = 'description']").children.text
+    parsed_info = name.split(/\n|\"|\r/)
+    summary = ""
+    parsed_info.each do |description|
+      if description != "" && description != "[Written by MAL Rewrite]"
+        if description.include? "\u2014"
+          array = description.split(/\u2014/)
+          word = ""
+          array.each do |no_dashes|
+            if word == ""
+              word = word + " " + no_dashes
+            else
+              word = word + " - " + no_dashes
+            end
+          end
+          if summary == ""
+            summary = summary + word.lstrip.rstrip
+          else
+            summary = summary + " " + word.lstrip.rstrip
+          end
+        elsif summary == ""
+          summary = summary + description.lstrip.rstrip
+        else
+          summary = summary + " " + description.lstrip.rstrip
+        end
+        # binding.pry
+      end
+    end
+    summary
+    #name = doc.css("span")[10]
+    #doc.css("div.js-scrollfix-bottom div
+  end
 
   def self.today
     self.scrape_index_page
     @@hashes.each do |anime_show_or_movie|
       anime = self.new
       anime.name = anime_show_or_movie[:name]
+      if anime.name.include? "Â°"
+        replace = anime.name.split("Â")
+        complete_item = replace[0] + replace[1]
+        anime.name = complete_item
+      end
+
       anime.show_length = anime_show_or_movie[:show_length]
       anime.time_aired = anime_show_or_movie[:time_aired]
       anime.members_watched = anime_show_or_movie[:members_watched]
       anime.url = anime_show_or_movie[:url]
+      if anime.url.include? "Â°"
+        replace = anime.url.split("Â")
+        complete_item = replace[0] + replace[1]
+        anime.url = complete_item
+      end
       @@objects << anime
     end
+    # @@objects.each do |anime_show_or_movie|
+    #   self.scrape_anime_page_profile(anime_show_or_movie.url)
+    # end
     @@objects
 
     # puts <<-DOC
     #   1. Shaman King
     #   2. Pokemon
     # DOC
-    #
-    # anime_1 = self.new
-    # anime_1.name = "Shaman King"
-    # anime_1.popularity = "4"
-    # anime_1.rating = "7"
-    # anime_1.description = "Really cool anime about spirits!"
-    # anime_2 = self.new
-    # anime_2.name = "Pokemon"
-    # anime_2.popularity = "13"
-    # anime_2.rating = "8"
-    # anime_2.description = "Really interesting anime about pets!"
-    # array = [anime_1, anime_2]
   end
 
 end
