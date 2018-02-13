@@ -8,7 +8,7 @@ class MyAnimeList::Anime
   @@objects = []
   @@url = "https://myanimelist.net/topanime.php"
 
-  attr_accessor :name, :show_length, :time_aired, :members_watched, :ranking, :url, :description, :rating
+  attr_accessor :name, :show_length, :time_aired, :members_watched, :ranking, :url, :description, :rating, :genres
 
   # https://myanimelist.net/topanime.php
   # https://myanimelist.net/anime/5114/Fullmetal_Alchemist__Brotherhood
@@ -17,7 +17,6 @@ class MyAnimeList::Anime
     html = open(@@url)
     doc = Nokogiri::HTML(html)
     # doc.css("div.detail").each do |example|
-
     doc.css("tr.ranking-list").each do |example|
       hash = {}
       name = example.css("div.detail div.di-ib.clearfix a.hoverinfo_trigger.fl-l.fs14.fw-b")
@@ -30,16 +29,21 @@ class MyAnimeList::Anime
       hash[:members_watched] = parsed_info[2].strip
       hash[:rating] = example.css("div.js-top-ranking-score-col.di-ib.al").text
       @@hashes << hash
-      binding.pry
     end
   end
 
   def self.scrape_anime_page_profile(url, anime_show_or_movie)
-    #want genres, description
-    #for genres, prob need to determine based off of title and iterate through that list
     html = open(url)
     doc = Nokogiri::HTML(html)
-    # name = doc.css("div.pb16 description").text
+    genres = doc.css("div")[45].text
+    text = ""
+    genre = genres.split(/\n| Genres:/)
+    genre.each do |type|
+      if type != "" && type != " "
+        text = text + type.lstrip
+      end
+    end
+
     name = doc.at("//span[@itemprop = 'description']").children.text
     parsed_info = name.split(/\n|\"|\r/)
     summary = ""
@@ -65,9 +69,10 @@ class MyAnimeList::Anime
         else
           summary = summary + " " + description.lstrip.rstrip
         end
-        # binding.pry
       end
     end
+
+    anime_show_or_movie.genres = text
     anime_show_or_movie.description = summary
   end
 
@@ -86,11 +91,14 @@ class MyAnimeList::Anime
       anime.time_aired = anime_show_or_movie[:time_aired]
       anime.members_watched = anime_show_or_movie[:members_watched]
       anime.url = anime_show_or_movie[:url]
+
+      #for Gintama weird name
       if anime.url.include? "Â°"
         replace = anime.url.split("Â°")
         complete_item = replace[0]
         anime.url = complete_item
       end
+      
       @@objects << anime
     end
     @@objects.each do |anime_show_or_movie|
@@ -98,10 +106,6 @@ class MyAnimeList::Anime
     end
     @@objects
 
-    # puts <<-DOC
-    #   1. Shaman King
-    #   2. Pokemon
-    # DOC
   end
 
 end
