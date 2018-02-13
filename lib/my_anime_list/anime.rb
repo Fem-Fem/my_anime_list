@@ -14,7 +14,7 @@ class MyAnimeList::Anime
   # https://myanimelist.net/anime/5114/Fullmetal_Alchemist__Brotherhood
 
   def self.scrape_index_page
-    html = open(@@url)
+    html = open(@@url, 'User-Agent' => 'Test')
     doc = Nokogiri::HTML(html)
     # doc.css("div.detail").each do |example|
     doc.css("tr.ranking-list").each do |example|
@@ -33,17 +33,34 @@ class MyAnimeList::Anime
   end
 
   def self.scrape_anime_page_profile(url, anime_show_or_movie)
-    html = open(url)
+    html = open(url,'User-Agent' => 'Test')
     doc = Nokogiri::HTML(html)
-    genres = doc.css("div")[45].text
-    text = ""
-    genre = genres.split(/\n| Genres:/)
-    genre.each do |type|
-      if type != "" && type != " "
-        text = text + type.lstrip
+
+    # genres = doc.css("div")[45].text
+    # text = ""
+    # genre = genres.split(/\n| Genres:/)
+    # genre.each do |type|
+    #   if type != "" && type != " "
+    #     text = text + type.lstrip
+    #   end
+    # end
+
+    # robust genre
+    gen = ""
+    hello = doc.css('div')[1].children.children.children.to_s
+    hi = hello.split(/\genres|.setCollapse/)
+    hi.each do |example|
+      if example[0..4] == "\", [\""
+        gen = example
       end
     end
+    gen = gen[4..200]
+    gen = gen.gsub(/\",\"/, ", ")
+    gen = gen[1..200]
+    gen = gen[0..-4]
+    genres = gen
 
+    #description info
     name = doc.at("//span[@itemprop = 'description']").children.text
     parsed_info = name.split(/\n|\"|\r/)
     summary = ""
@@ -72,7 +89,8 @@ class MyAnimeList::Anime
       end
     end
 
-    anime_show_or_movie.genres = text
+    # anime_show_or_movie.genres = text
+    anime_show_or_movie.genres = genres
     anime_show_or_movie.description = summary
   end
 
@@ -98,7 +116,7 @@ class MyAnimeList::Anime
         complete_item = replace[0]
         anime.url = complete_item
       end
-      
+
       @@objects << anime
     end
     @@objects.each do |anime_show_or_movie|
