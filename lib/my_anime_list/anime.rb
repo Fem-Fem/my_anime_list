@@ -1,5 +1,6 @@
 require 'nokogiri'
 require 'open-uri'
+require 'pry'
 
 class MyAnimeList::Anime
 
@@ -7,7 +8,7 @@ class MyAnimeList::Anime
   @@objects = []
   @@url = "https://myanimelist.net/topanime.php"
 
-  attr_accessor :name, :show_length, :time_aired, :members_watched, :ranking, :url, :description
+  attr_accessor :name, :show_length, :time_aired, :members_watched, :ranking, :url, :description, :rating
 
   # https://myanimelist.net/topanime.php
   # https://myanimelist.net/anime/5114/Fullmetal_Alchemist__Brotherhood
@@ -15,24 +16,22 @@ class MyAnimeList::Anime
   def self.scrape_index_page
     html = open(@@url)
     doc = Nokogiri::HTML(html)
-    #    doc.css("div.information.di-ib.mt4").each do |example|
-    hello = doc.css("div.ranking-list")
-    doc.css("div.detail").each do |example|
+    # doc.css("div.detail").each do |example|
+
+    doc.css("tr.ranking-list").each do |example|
       hash = {}
-      name = example.css("div.di-ib.clearfix a.hoverinfo_trigger.fl-l.fs14.fw-b")
-      hash[:name] = example.css("div.di-ib.clearfix a.hoverinfo_trigger.fl-l.fs14.fw-b").text
+      name = example.css("div.detail div.di-ib.clearfix a.hoverinfo_trigger.fl-l.fs14.fw-b")
+      hash[:name] = example.css("div.detail div.di-ib.clearfix a.hoverinfo_trigger.fl-l.fs14.fw-b").text
       hash[:url] = name[0].attributes["href"].value
-      anime_info = example.css("div.information.di-ib.mt4").text.strip
+      anime_info = example.css("div.detail div.information.di-ib.mt4").text.strip
       parsed_info = anime_info.split(/\n/)
       hash[:show_length] = parsed_info[0]
       hash[:time_aired] = parsed_info[1].strip
       hash[:members_watched] = parsed_info[2].strip
+      hash[:rating] = example.css("div.js-top-ranking-score-col.di-ib.al").text
       @@hashes << hash
+      binding.pry
     end
-    # doc.css("div.js-top-ranking-score-col.di-ib.al").each.with_index do |rating, anime|
-    #   @@hashes[anime][:rating] = rating.text
-    # end
-
   end
 
   def self.scrape_anime_page_profile(url, anime_show_or_movie)
