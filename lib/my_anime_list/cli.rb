@@ -1,6 +1,5 @@
 class MyAnimeList::CLI
 
-
   def call
     list_anime
     menu
@@ -12,7 +11,6 @@ class MyAnimeList::CLI
     @anime = MyAnimeList::Anime.today
     @anime.each.with_index(1) do |show, i|
       puts "#{i}. #{show.name}; Show Popularity: #{show.members_watched}; Show Length: #{show.time_aired}; Show Length: #{show.show_length}"
-      puts show.url
     end
   end
 
@@ -20,8 +18,8 @@ class MyAnimeList::CLI
     puts "Enter the number of the anime that you would like to learn more about!"
     input = gets.strip.downcase
     if input.to_i > 0
-      puts @anime[input.to_i - 1]
-      puts @anime[input.to_i - 1].url
+      puts @anime[input.to_i - 1].name
+      puts @anime[input.to_i - 1].description
     elsif input == "list"
       list_anime
       menu

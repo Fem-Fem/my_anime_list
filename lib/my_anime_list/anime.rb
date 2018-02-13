@@ -27,7 +27,6 @@ class MyAnimeList::Anime
       hash[:show_length] = parsed_info[0]
       hash[:time_aired] = parsed_info[1].strip
       hash[:members_watched] = parsed_info[2].strip
-      # hash.rank = example.text
       @@hashes << hash
     end
     # doc.css("div.js-top-ranking-score-col.di-ib.al").each.with_index do |rating, anime|
@@ -36,10 +35,9 @@ class MyAnimeList::Anime
 
   end
 
-  def self.scrape_anime_page_profile(url)
+  def self.scrape_anime_page_profile(url, anime_show_or_movie)
     #want genres, description
     #for genres, prob need to determine based off of title and iterate through that list
-    #for description, need to understand how to interact with a class.
     html = open(url)
     doc = Nokogiri::HTML(html)
     # name = doc.css("div.pb16 description").text
@@ -71,9 +69,7 @@ class MyAnimeList::Anime
         # binding.pry
       end
     end
-    summary
-    #name = doc.css("span")[10]
-    #doc.css("div.js-scrollfix-bottom div
+    anime_show_or_movie.description = summary
   end
 
   def self.today
@@ -92,15 +88,15 @@ class MyAnimeList::Anime
       anime.members_watched = anime_show_or_movie[:members_watched]
       anime.url = anime_show_or_movie[:url]
       if anime.url.include? "Â°"
-        replace = anime.url.split("Â")
-        complete_item = replace[0] + replace[1]
+        replace = anime.url.split("Â°")
+        complete_item = replace[0]
         anime.url = complete_item
       end
       @@objects << anime
     end
-    # @@objects.each do |anime_show_or_movie|
-    #   self.scrape_anime_page_profile(anime_show_or_movie.url)
-    # end
+    @@objects.each do |anime_show_or_movie|
+      self.scrape_anime_page_profile(anime_show_or_movie.url, anime_show_or_movie)
+    end
     @@objects
 
     # puts <<-DOC
