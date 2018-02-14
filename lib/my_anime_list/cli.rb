@@ -1,4 +1,4 @@
-# need to somewhat restructure CLI to separate scraper and anime classes
+# need to find way to open link
 # need to avoid being blocked by myanimelist?
 
 class MyAnimeList::CLI
@@ -44,6 +44,7 @@ class MyAnimeList::CLI
         puts "#{i}. #{show.name}; Show Popularity: #{show.members_watched}; Show Length: #{show.time_aired}; Show Length: #{show.show_length}"
       end
     end
+    open_in_broswer(@@anime[input.to_i - 1].url)
     menu
   end
 
@@ -57,6 +58,7 @@ class MyAnimeList::CLI
       puts "\n"
       puts "Description: #{@@anime[input.to_i - 1].description}"
       puts "\n"
+      open_in_broswer(@@anime[input.to_i - 1].url)
       menu
     elsif input == "list"
       re_list_anime
@@ -65,6 +67,15 @@ class MyAnimeList::CLI
       goodbye
     else
       puts "Not sure what you want! Please type list or exit!"
+    end
+  end
+
+  def open_in_broswer(url)
+    puts "If you would like to open this page in your browser, please enter 'Y'. Else, enter anything else."
+    input = gets.strip.upcase
+    if input == "Y"
+      binding.pry
+      system("open '#{url}'")
     end
   end
 

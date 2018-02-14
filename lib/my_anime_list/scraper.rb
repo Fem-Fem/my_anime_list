@@ -9,7 +9,7 @@ class MyAnimeList::Scraper
   @@url = "https://myanimelist.net/topanime.php"
 
   def self.scrape_index_page
-    html = open(@@url, 'User-Agent' => 'Test2')
+    html = open(@@url, 'User-Agent' => 'Testing')
     doc = Nokogiri::HTML(html)
     doc.css("tr.ranking-list").each do |example|
       hash = {}
@@ -28,7 +28,7 @@ class MyAnimeList::Scraper
   end
 
   def self.scrape_anime_page_profile(url, anime_show_or_movie)
-    html = open(url,'User-Agent' => 'Test2')
+    html = open(url,'User-Agent' => 'Testing')
     doc = Nokogiri::HTML(html)
 
     # genres = doc.css("div")[45].text
@@ -42,19 +42,19 @@ class MyAnimeList::Scraper
     # anime_show_or_movie.genres = text
 
     # robust genre
-    gen = ""
-    hello = doc.css('div')[1].children.children.children.to_s
-    hi = hello.split(/\genres|.setCollapse/)
-    hi.each do |example|
+    genre = ""
+    rough_info = doc.css('div')[1].children.children.children.to_s
+    genre_rough_info = rough_info.split(/\genres|.setCollapse/)
+    genre_rough_info.each do |example|
       if example[0..4] == "\", [\""
-        gen = example
+        genre = example
       end
     end
-    gen = gen[4..200]
-    gen = gen.gsub(/\",\"/, ", ")
-    gen = gen[1..200]
-    gen = gen[0..-4]
-    genres = gen
+    genre = genre[4..200]
+    genre = genre.gsub(/\",\"/, ", ")
+    genre = genre[1..200]
+    genre = genre[0..-4]
+    genres = genre
 
     #description info
     name = doc.at("//span[@itemprop = 'description']").children.text
@@ -88,13 +88,6 @@ class MyAnimeList::Scraper
     anime_show_or_movie.genres = genres
     anime_show_or_movie.description = summary
     return [genres, summary]
-  end
-
-  def self.today
-    @@objects.each do |anime_show_or_movie|
-      self.scrape_anime_page_profile(anime_show_or_movie.url, anime_show_or_movie)
-    end
-    @@objects
   end
 
 end
