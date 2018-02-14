@@ -4,15 +4,11 @@ require 'pry'
 
 class MyAnimeList::Anime
 
-  ## don't need the hashes, shouldn't need the url either
-  @@objects = []
-  @@url = "https://myanimelist.net/topanime.php"
+  @@all = []
 
   attr_accessor :name, :show_length, :time_aired, :members_watched, :ranking, :url, :description, :rating, :genres
 
   def self.today(hashes)
-    ## remake CLI, delete lien below, make it input hashes
-    #self.scrape_index_page
     hashes.each do |anime_show_or_movie|
       anime = self.new
       anime.name = anime_show_or_movie[:name]
@@ -34,13 +30,9 @@ class MyAnimeList::Anime
         anime.url = complete_item
       end
 
-      @@objects << anime
+      @@all << anime
     end
-    @@objects.each do |anime_show_or_movie|
-      #self.scrape_anime_page_profile(anime_show_or_movie.url, anime_show_or_movie)
-    end
-    @@objects
-
+    @@all
   end
 
 end

@@ -4,28 +4,36 @@
 class MyAnimeList::CLI
 
   @@all = []
+  @@anime = []
+  @@hashes = []
+
   def call
+    make_anime
+    add_extensive_details_to_anime
     list_anime
     menu
     goodbye
   end
 
+  def make_anime
+    @@hashes = MyAnimeList::Scraper.scrape_index_page
+    @@anime = MyAnimeList::Anime.today(@@hashes)
+  end
+
+  def add_extensive_details_to_anime
+    @@anime.each do |anime_show_or_movie|
+      MyAnimeList::Scraper.scrape_anime_page_profile(anime_show_or_movie.url, anime_show_or_movie)
+    end
+    @@anime
+  end
+
   def list_anime
     puts "Best anime:"
-    ## anime_hash = MyAnimeList::Scraper.scrape_index_page
-    @@hashes = MyAnimeList::Scraper.scrape_index_page
-    @anime = MyAnimeList::Anime.today(@@hashes)
-    # @anime = MyAnimeList::Anime.today
-    @anime.each.with_index(1) do |show, i|
+    @@anime.each.with_index(1) do |show, i|
       @@all << show
       puts "#{i}. #{show.name}; Show Popularity: #{show.members_watched}; Show Length: #{show.time_aired}; Show Length: #{show.show_length}"
       puts "--------------------------------------------------------------------------------------------------------------------------------------------"
     end
-
-  end
-
-  def add_attributes_to_anime
-
   end
 
   def re_list_anime
@@ -39,16 +47,17 @@ class MyAnimeList::CLI
     menu
   end
 
-
   def menu
     puts "Enter the number of the anime that you would like to learn more about!"
     puts "You can also enter 'list' to see the list again, or 'exit' to exit."
     input = gets.strip.downcase
     if input.to_i > 0
-      puts "Name: #{@anime[input.to_i - 1].name}"
-      puts "Genres: #{@anime[input.to_i - 1].genres}"
+      puts "Name: #{@@anime[input.to_i - 1].name}"
+      puts "Genres: #{@@anime[input.to_i - 1].genres}"
       puts "\n"
-      puts "Description: #{@anime[input.to_i - 1].description}"
+      puts "Description: #{@@anime[input.to_i - 1].description}"
+      puts "\n"
+      menu
     elsif input == "list"
       re_list_anime
       menu

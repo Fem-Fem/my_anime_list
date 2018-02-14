@@ -7,8 +7,6 @@ class MyAnimeList::Scraper
   @@hashes = []
   @@objects = []
   @@url = "https://myanimelist.net/topanime.php"
-  # https://myanimelist.net/topanime.php
-  # https://myanimelist.net/anime/5114/Fullmetal_Alchemist__Brotherhood
 
   def self.scrape_index_page
     html = open(@@url, 'User-Agent' => 'Test2')
@@ -41,6 +39,7 @@ class MyAnimeList::Scraper
     #     text = text + type.lstrip
     #   end
     # end
+    # anime_show_or_movie.genres = text
 
     # robust genre
     gen = ""
@@ -86,7 +85,6 @@ class MyAnimeList::Scraper
       end
     end
 
-    # anime_show_or_movie.genres = text
     anime_show_or_movie.genres = genres
     anime_show_or_movie.description = summary
     return [genres, summary]
@@ -97,7 +95,6 @@ class MyAnimeList::Scraper
       self.scrape_anime_page_profile(anime_show_or_movie.url, anime_show_or_movie)
     end
     @@objects
-
   end
 
 end
