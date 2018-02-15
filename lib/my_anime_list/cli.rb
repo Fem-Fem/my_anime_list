@@ -1,6 +1,3 @@
-# need to find way to open link
-# need to avoid being blocked by myanimelist?
-
 class MyAnimeList::CLI
 
   @@all = []
@@ -16,6 +13,7 @@ class MyAnimeList::CLI
   end
 
   def make_anime
+    puts "Loading..."
     @@hashes = MyAnimeList::Scraper.scrape_index_page
     @@anime = MyAnimeList::Anime.today(@@hashes)
   end
@@ -44,7 +42,6 @@ class MyAnimeList::CLI
         puts "#{i}. #{show.name}; Show Popularity: #{show.members_watched}; Show Length: #{show.time_aired}; Show Length: #{show.show_length}"
       end
     end
-    open_in_broswer(@@anime[input.to_i - 1].url)
     menu
   end
 
@@ -62,20 +59,20 @@ class MyAnimeList::CLI
       menu
     elsif input == "list"
       re_list_anime
-      menu
     elsif input == "exit"
-      goodbye
+      # exit program
     else
-      puts "Not sure what you want! Please type list or exit!"
+      puts "Command not found"
+      menu
     end
   end
 
   def open_in_broswer(url)
-    puts "If you would like to open this page in your browser, please enter 'Y'. Else, enter anything else."
+    puts "If you would like to have the url of this page, please enter 'Y'. Else, enter anything else."
     input = gets.strip.upcase
     if input == "Y"
-      binding.pry
-      system("open '#{url}'")
+      # need to find way to open link
+      puts url
     end
   end
 

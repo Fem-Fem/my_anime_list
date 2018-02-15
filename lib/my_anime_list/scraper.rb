@@ -1,5 +1,3 @@
-require 'nokogiri'
-require 'open-uri'
 require 'pry'
 
 class MyAnimeList::Scraper
@@ -30,21 +28,9 @@ class MyAnimeList::Scraper
   def self.scrape_anime_page_profile(url, anime_show_or_movie)
     html = open(url,'User-Agent' => 'Testing')
     doc = Nokogiri::HTML(html)
-
-    # genres = doc.css("div")[45].text
-    # text = ""
-    # genre = genres.split(/\n| Genres:/)
-    # genre.each do |type|
-    #   if type != "" && type != " "
-    #     text = text + type.lstrip
-    #   end
-    # end
-    # anime_show_or_movie.genres = text
-
-    # robust genre
     genre = ""
     rough_info = doc.css('div')[1].children.children.children.to_s
-    genre_rough_info = rough_info.split(/\genres|.setCollapse/)
+    genre_rough_info = rough_info.split(/genres|.setCollapse/)
     genre_rough_info.each do |example|
       if example[0..4] == "\", [\""
         genre = example
