@@ -19,7 +19,10 @@ class MyAnimeList::CLI
   end
 
   def add_extensive_details_to_anime
-    @@anime.each do |anime_show_or_movie|
+    @@anime[0..25].each do |anime_show_or_movie|
+      MyAnimeList::Scraper.scrape_anime_page_profile(anime_show_or_movie.url, anime_show_or_movie)
+    end
+    @@anime[26..50].each do |anime_show_or_movie|
       MyAnimeList::Scraper.scrape_anime_page_profile(anime_show_or_movie.url, anime_show_or_movie)
     end
     @@anime

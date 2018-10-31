@@ -26,7 +26,7 @@ class MyAnimeList::Scraper
   end
 
   def self.scrape_anime_page_profile(url, anime_show_or_movie)
-    html = open(url,'User-Agent' => 'Testing')
+    html = open(url)
     doc = Nokogiri::HTML(html)
     genre = ""
     rough_info = doc.css('div')[1].children.children.children.to_s
