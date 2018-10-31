@@ -52,14 +52,20 @@ class MyAnimeList::CLI
     puts "Enter the number of the anime that you would like to learn more about!"
     puts "You can also enter 'list' to see the list again, or 'exit' to exit."
     input = gets.strip.downcase
-    if input.to_i > 0
-      puts "Name: #{@@anime[input.to_i - 1].name}"
-      puts "Genres: #{@@anime[input.to_i - 1].genres}"
-      puts "\n"
-      puts "Description: #{@@anime[input.to_i - 1].description}"
-      puts "\n"
-      open_in_broswer(@@anime[input.to_i - 1].url)
-      menu
+    binding.pry
+    if input.class == Float
+      # make function for valid number?
+      if input.to_i <= 50
+        puts "Name: #{@@anime[input.to_i - 1].name}"
+        puts "Genres: #{@@anime[input.to_i - 1].genres}"
+        puts "\n"
+        puts "Description: #{@@anime[input.to_i - 1].description}"
+        puts "\n"
+        open_in_broswer(@@anime[input.to_i - 1].url)
+        menu
+      else
+        re_list_anime
+      end
     elsif input == "list"
       re_list_anime
     elsif input == "exit"
@@ -75,6 +81,7 @@ class MyAnimeList::CLI
     input = gets.strip.upcase
     if input == "Y"
       # need to find way to open link
+      # puts url.text.gsub(URI.regexp, '<a href="\0">\0</a>')
       puts url
     end
   end
