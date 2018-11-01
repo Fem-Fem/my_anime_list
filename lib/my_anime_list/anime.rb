@@ -12,25 +12,29 @@ class MyAnimeList::Anime
 
     anime_info = a.css("div.detail div.information.di-ib.mt4").text.strip
     parsed_anime_info = anime_info.split(/\n/)
-    #     hash[:show_length] = parsed_info[0]
-    #     hash[:time_aired] = parsed_info[1].strip
-    #     hash[:members_watched] = parsed_info[2].strip
     self.new(
       a.css("div.detail div.di-ib.clearfix a.hoverinfo_trigger.fl-l.fs14.fw-b").text,
       parsed_info[0],
       parsed_info[1].strip,
       parsed_info[2].strip,
-
+      a.css("div.detail div.di-ib.clearfix a.hoverinfo_trigger.fl-l.fs14.fw-b")[0].attributes["href"].value
     )
   end
 
-  def initialize(name=nil, show_length=nil, time_aired=nil, members_watched=nil)
+  def initialize(name=nil, show_length=nil, time_aired=nil, members_watched=nil, url=nil)
     @name = name
     @show_length = url
     @time_aired = location
     @members_watched = position
+    @url = url
     @@all << self
   end
+
+  def doc
+    @doc ||= Nokogiri::HTML(open(self.url))
+  end
+
+  def genre()
 
   # def self.today(anime_detailed_info)
   #   anime_detailed_info.each do |anime_show_or_movie|
