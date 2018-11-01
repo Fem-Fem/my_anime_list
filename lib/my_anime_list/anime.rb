@@ -19,8 +19,18 @@ class MyAnimeList::Anime
       a.css("div.detail div.di-ib.clearfix a.hoverinfo_trigger.fl-l.fs14.fw-b").text,
       parsed_info[0],
       parsed_info[1].strip,
-      parsed_info[2].strip
+      parsed_info[2].strip,
+
     )
+  end
+
+  def initialize(name=nil, show_length=nil, time_aired=nil, members_watched=nil)
+    @name = name
+    @show_length = url
+    @time_aired = location
+    @members_watched = position
+    @@all << self
+  end
 
   # def self.today(anime_detailed_info)
   #   anime_detailed_info.each do |anime_show_or_movie|
