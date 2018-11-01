@@ -96,18 +96,7 @@ class MyAnimeList::Anime
       end
       @summary = summary
   end
-  #
-  #     anime.show_length = anime_show_or_movie[:show_length]
-  #     anime.time_aired = anime_show_or_movie[:time_aired]
-  #     anime.members_watched = anime_show_or_movie[:members_watched]
-  #     anime.url = anime_show_or_movie[:url]
-  #
-  #     #for Gintama weird case
-  #     if anime.url.include? "Â°"
-  #       replace = anime.url.split("Â°")
-  #       complete_item = replace[0]
-  #       anime.url = complete_item
-  #     end
+
   #
   #     @@all << anime
   #   end
