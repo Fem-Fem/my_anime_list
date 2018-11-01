@@ -6,7 +6,7 @@ class MyAnimeList::Anime
 
   @@all = []
 
-  attr_accessor :name, :show_length, :time_aired, :members_watched, :ranking, :url, :description, :genres
+  attr_accessor :name, :show_length, :time_aired, :members_watched, :url, :description, :genres
 
   def self.new_from_index_page(a)
 
