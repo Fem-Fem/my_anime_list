@@ -2,8 +2,6 @@ require 'pry'
 
 class MyAnimeList::Scraper
 
-  @@hashes = []
-  @@objects = []
   @@url = "https://myanimelist.net/topanime.php"
 
   def self.get_page
