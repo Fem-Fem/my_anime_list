@@ -5,6 +5,7 @@ require 'pry'
 class MyAnimeList::Anime
 
   @@all = []
+  @@counter = 0
 
   attr_accessor :name, :show_length, :time_aired, :members_watched, :url, :description, :genres
 
@@ -68,39 +69,31 @@ class MyAnimeList::Anime
 
   def description
       name = doc.at("//span[@itemprop = 'description']").children.text.split(/\n|\"|\r/)
-      summary = ""
+      final_description = ""
       name.each do |description|
         if description != "" && description != "[Written by MAL Rewrite]"
           if description.include? "\u2014"
             array = description.split(/\u2014/)
             word = ""
             array.each do |phrase|
-              # binding.pry
               if word == ""
                 word = word + " " + phrase
               else
                 word = word + " - " + phrase
               end
             end
-            if summary == ""
-              summary = summary + word.strip
+            if final_description == ""
+              final_description = final_description + word.strip
             else
-              summary = summary + " " + word.strip
+              final_description = final_description + " " + word.strip
             end
-          elsif summary == ""
-            summary = summary + description.strip
+          elsif final_description == ""
+            final_description = final_description + description.strip
           else
-            summary = summary + " " + description.strip
+            final_description = final_description + " " + description.strip
           end
         end
       end
-      @summary = summary
+      @summary = final_description
   end
-
-  #
-  #     @@all << anime
-  #   end
-  #   @@all
-  # end
-
 end
