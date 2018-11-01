@@ -96,16 +96,6 @@ class MyAnimeList::Anime
       end
       @summary = summary
   end
-
-  # def self.today(anime_detailed_info)
-  #   anime_detailed_info.each do |anime_show_or_movie|
-  #     anime = self.new
-  #     anime.name = anime_show_or_movie[:name]
-  #     if anime.name.include? "Â°"
-  #       replace = anime.name.split("Â")
-  #       complete_item = replace[0] + replace[1]
-  #       anime.name = complete_item
-  #     end
   #
   #     anime.show_length = anime_show_or_movie[:show_length]
   #     anime.time_aired = anime_show_or_movie[:time_aired]
