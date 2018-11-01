@@ -21,7 +21,7 @@ class MyAnimeList::CLI
   end
 
   def re_list_anime
-    puts "If you would like to see the top x anime, please enter an integer less than 50. If you would like to see all of the anime again, please enter '50'"
+    puts "If you would like to see the top x anime, please enter an integer less than #{MyAnimeList::Anime.all.length}. If you would like to see all of the anime again, please enter '#{MyAnimeList::Anime.all.length}'"
     limit = gets.strip.to_i
     MyAnimeList::Anime.all.each.with_index(1) do |show, i|
       if i <= limit
@@ -35,8 +35,9 @@ class MyAnimeList::CLI
     puts "Enter the number of the anime that you would like to learn more about!"
     puts "You can also enter 'list' to see the list again, or 'exit' to exit."
     input = gets.strip.downcase
-    if (input.to_i <= 50) && (input.to_i > 0)
+    if (input.to_i <=  MyAnimeList::Anime.all.length) && (input.to_i > 0)
       this_anime = MyAnimeList::Anime.find(input.to_i)
+      MyAnimeList::Scraper.add_extensive_details_to_anime(this_anime) if this_anime.genres == nil
       puts "Name: #{this_anime.name}"
       puts "Show Popularity: #{this_anime.members_watched}"
       puts "Time Aired: #{this_anime.time_aired}"
