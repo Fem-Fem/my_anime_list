@@ -1,5 +1,5 @@
 # my-anime-list-cli-app
-CLI app to obtain MyAnimeList information
+CLI app to obtain MyAnimeList information! Use this to get information on the most popular anime on https://myanimelist.net/
 
 ## Installation
 
