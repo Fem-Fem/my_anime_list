@@ -1,12 +1,9 @@
 class MyAnimeList::CLI
 
   @@all = []
-  @@anime = []
-  @@scraped_anime_info = []
 
   def call
     make_anime
-    # add_extensive_details_to_anime
     list_anime
     menu
     goodbye
@@ -14,20 +11,8 @@ class MyAnimeList::CLI
 
   def make_anime
     puts "Loading..."
-    @@anime = MyAnimeList::Scraper.make_anime
-    # @@scraped_anime_info = MyAnimeList::Scraper.scrape_index_page
-    # @@anime = MyAnimeList::Anime.today(@@scraped_anime_info)
+    MyAnimeList::Scraper.make_anime
   end
-
-  # def add_extensive_details_to_anime
-  #   @@anime[0..25].each do |anime_show_or_movie|
-  #     MyAnimeList::Scraper.scrape_anime_page_profile(anime_show_or_movie.url, anime_show_or_movie)
-  #   end
-  #   @@anime[26..50].each do |anime_show_or_movie|
-  #     MyAnimeList::Scraper.scrape_anime_page_profile(anime_show_or_movie.url, anime_show_or_movie)
-  #   end
-  #   @@anime
-  # end
 
   def list_anime
     puts "Best anime:"
@@ -36,11 +21,6 @@ class MyAnimeList::CLI
       puts "#{i}. #{show.name}; Show Popularity: #{show.members_watched}; Show Length: #{show.time_aired}; Show Length: #{show.show_length}"
       puts "--------------------------------------------------------------------------------------------------------------------------------------------"
     end
-    # @@anime.each.with_index(1) do |show, i|
-    #   @@all << show
-    #   puts "#{i}. #{show.name}; Show Popularity: #{show.members_watched}; Show Length: #{show.time_aired}; Show Length: #{show.show_length}"
-    #   puts "--------------------------------------------------------------------------------------------------------------------------------------------"
-    # end
   end
 
   def re_list_anime
@@ -52,16 +32,6 @@ class MyAnimeList::CLI
       end
     end
     menu
-  end
-
-  def number_helper(input)
-    if input > 50
-      return false
-    elsif input <= 0
-      return false
-    else
-      return true
-    end
   end
 
   def menu
