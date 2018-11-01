@@ -8,8 +8,8 @@ class MyAnimeList::Anime
 
   attr_accessor :name, :show_length, :time_aired, :members_watched, :ranking, :url, :description, :rating, :genres
 
-  def self.today(hashes)
-    hashes.each do |anime_show_or_movie|
+  def self.today(anime_detailed_info)
+    anime_detailed_info.each do |anime_show_or_movie|
       anime = self.new
       anime.name = anime_show_or_movie[:name]
       if anime.name.include? "Â°"
@@ -23,7 +23,7 @@ class MyAnimeList::Anime
       anime.members_watched = anime_show_or_movie[:members_watched]
       anime.url = anime_show_or_movie[:url]
 
-      #for Gintama weird name
+      #for Gintama weird case
       if anime.url.include? "Â°"
         replace = anime.url.split("Â°")
         complete_item = replace[0]

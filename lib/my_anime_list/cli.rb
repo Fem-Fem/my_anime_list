@@ -2,7 +2,7 @@ class MyAnimeList::CLI
 
   @@all = []
   @@anime = []
-  @@hashes = []
+  @@scraped_anime_info = []
 
   def call
     make_anime
@@ -14,8 +14,8 @@ class MyAnimeList::CLI
 
   def make_anime
     puts "Loading..."
-    @@hashes = MyAnimeList::Scraper.scrape_index_page
-    @@anime = MyAnimeList::Anime.today(@@hashes)
+    @@scraped_anime_info = MyAnimeList::Scraper.scrape_index_page
+    @@anime = MyAnimeList::Anime.today(@@scraped_anime_info)
   end
 
   def add_extensive_details_to_anime
@@ -80,8 +80,6 @@ class MyAnimeList::CLI
     puts "If you would like to have the url of this page, please enter 'Y'. Else, enter anything else."
     input = gets.strip.upcase
     if input == "Y"
-      # need to find way to open link
-      # puts url.text.gsub(URI.regexp, '<a href="\0">\0</a>')
       puts url
     end
   end
