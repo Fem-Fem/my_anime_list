@@ -6,6 +6,9 @@ CLI app to obtain MyAnimeList information! Use this to get information on the mo
   git clone https://github.com/Fem-Fem/my_anime_list.git
   cd my_anime_list
   ruby bin/my-anime-list
+
+## Usage
+ After using ruby bin/my-anime-list, the CLI should be easily navigatable! Type a specific number to see information on any of the anime. You also have access to the url, if you so choose, so that you can view it in the browser!
   
 ## Contributing
 
