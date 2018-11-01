@@ -1,7 +1,5 @@
 class MyAnimeList::CLI
 
-  @@all = []
-
   def call
     make_anime
     list_anime
@@ -17,7 +15,6 @@ class MyAnimeList::CLI
   def list_anime
     puts "Best anime:"
     MyAnimeList::Anime.all.each.with_index(1) do |show, i|
-      @@all << show
       puts "#{i}. #{show.name}; Show Popularity: #{show.members_watched}; Show Length: #{show.time_aired}; Show Length: #{show.show_length}"
       puts "--------------------------------------------------------------------------------------------------------------------------------------------"
     end
@@ -26,7 +23,7 @@ class MyAnimeList::CLI
   def re_list_anime
     puts "If you would like to see the top x anime, please enter an integer less than 50. If you would like to see all of the anime again, please enter '50'"
     limit = gets.strip.to_i
-    @@all.each.with_index(1) do |show, i|
+    MyAnimeList::Anime.each.with_index(1) do |show, i|
       if i <= limit
         puts "#{i}. #{show.name}; Show Popularity: #{show.members_watched}; Show Time Aired: #{show.time_aired}; Show Length: #{show.show_length}"
       end
