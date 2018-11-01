@@ -34,7 +34,25 @@ class MyAnimeList::Anime
     @doc ||= Nokogiri::HTML(open(self.url))
   end
 
-  def genre()
+  def genres
+      genre = ""
+      rough_info = doc.css('div')[1].children.children.children.to_s
+      genre_rough_info = rough_info.split(/genres|.setCollapse/)
+      genre_rough_info.each do |example|
+        if example[0..4] == "\", [\""
+          genre = example
+        end
+      end
+      # make method?
+      genre = genre[4..200]
+      genre = genre.gsub(/\",\"/, ", ")
+      genre = genre[1..200]
+      genre = genre[0..-4]
+      genres = genre
+  end
+
+  def description
+  end
 
   # def self.today(anime_detailed_info)
   #   anime_detailed_info.each do |anime_show_or_movie|
