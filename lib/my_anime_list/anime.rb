@@ -49,9 +49,37 @@ class MyAnimeList::Anime
       genre = genre[1..200]
       genre = genre[0..-4]
       genres = genre
+      @genres = genres
   end
 
   def description
+      name = doc.at("//span[@itemprop = 'description']").children.text.split(/\n|\"|\r/)
+      summary = ""
+      name.each do |description|
+        if description != "" && description != "[Written by MAL Rewrite]"
+          if description.include? "\u2014"
+            array = description.split(/\u2014/)
+            word = ""
+            array.each do |no_dashes|
+              if word == ""
+                word = word + " " + no_dashes
+              else
+                word = word + " - " + no_dashes
+              end
+            end
+            if summary == ""
+              summary = summary + word.strip
+            else
+              summary = summary + " " + word.strip
+            end
+          elsif summary == ""
+            summary = summary + description.strip
+          else
+            summary = summary + " " + description.strip
+          end
+        end
+      end
+      @summary = summary
   end
 
   # def self.today(anime_detailed_info)
