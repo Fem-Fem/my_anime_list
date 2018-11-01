@@ -31,11 +31,16 @@ class MyAnimeList::CLI
 
   def list_anime
     puts "Best anime:"
-    @@anime.each.with_index(1) do |show, i|
+    MyAnimeList::Anime.all.each.with_index(1) do |show, i|
       @@all << show
       puts "#{i}. #{show.name}; Show Popularity: #{show.members_watched}; Show Length: #{show.time_aired}; Show Length: #{show.show_length}"
       puts "--------------------------------------------------------------------------------------------------------------------------------------------"
     end
+    # @@anime.each.with_index(1) do |show, i|
+    #   @@all << show
+    #   puts "#{i}. #{show.name}; Show Popularity: #{show.members_watched}; Show Length: #{show.time_aired}; Show Length: #{show.show_length}"
+    #   puts "--------------------------------------------------------------------------------------------------------------------------------------------"
+    # end
   end
 
   def re_list_anime
