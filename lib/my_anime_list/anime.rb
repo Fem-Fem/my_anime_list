@@ -38,6 +38,10 @@ class MyAnimeList::Anime
     @doc ||= Nokogiri::HTML(open(self.url))
   end
 
+  def self.find(int)
+    @@all[int-1]
+  end
+
   def genres
       genre = ""
       rough_info = doc.css('div')[1].children.children.children.to_s

@@ -68,14 +68,14 @@ class MyAnimeList::CLI
     puts "Enter the number of the anime that you would like to learn more about!"
     puts "You can also enter 'list' to see the list again, or 'exit' to exit."
     input = gets.strip.downcase
-    binding.pry
     if (input.to_i <= 50) && (input.to_i > 0)
-      puts "Name: #{@@anime[input.to_i - 1].name}"
-      puts "Genres: #{@@anime[input.to_i - 1].genres}"
+      this_anime = MyAnimeList::Anime.find(input.to_i)
+      puts "Name: #{this_anime.name}"
+      puts "Genres: #{this_anime.genres}"
       puts "\n"
-      puts "Description: #{@@anime[input.to_i - 1].description}"
+      puts "Description: #{this_anime.description}"
       puts "\n"
-      open_in_broswer(@@anime[input.to_i - 1].url)
+      open_in_broswer(this_anime.url)
       menu
     elsif input == "list"
       re_list_anime
