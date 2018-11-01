@@ -6,7 +6,7 @@ class MyAnimeList::CLI
 
   def call
     make_anime
-    add_extensive_details_to_anime
+    # add_extensive_details_to_anime
     list_anime
     menu
     goodbye
@@ -14,19 +14,20 @@ class MyAnimeList::CLI
 
   def make_anime
     puts "Loading..."
-    @@scraped_anime_info = MyAnimeList::Scraper.scrape_index_page
-    @@anime = MyAnimeList::Anime.today(@@scraped_anime_info)
+    @@anime = MyAnimeList::Scraper.make_anime
+    # @@scraped_anime_info = MyAnimeList::Scraper.scrape_index_page
+    # @@anime = MyAnimeList::Anime.today(@@scraped_anime_info)
   end
 
-  def add_extensive_details_to_anime
-    @@anime[0..25].each do |anime_show_or_movie|
-      MyAnimeList::Scraper.scrape_anime_page_profile(anime_show_or_movie.url, anime_show_or_movie)
-    end
-    @@anime[26..50].each do |anime_show_or_movie|
-      MyAnimeList::Scraper.scrape_anime_page_profile(anime_show_or_movie.url, anime_show_or_movie)
-    end
-    @@anime
-  end
+  # def add_extensive_details_to_anime
+  #   @@anime[0..25].each do |anime_show_or_movie|
+  #     MyAnimeList::Scraper.scrape_anime_page_profile(anime_show_or_movie.url, anime_show_or_movie)
+  #   end
+  #   @@anime[26..50].each do |anime_show_or_movie|
+  #     MyAnimeList::Scraper.scrape_anime_page_profile(anime_show_or_movie.url, anime_show_or_movie)
+  #   end
+  #   @@anime
+  # end
 
   def list_anime
     puts "Best anime:"
