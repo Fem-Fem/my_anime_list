@@ -15,7 +15,7 @@ class MyAnimeList::Scraper
   end
 
   def self.make_anime
-    self.scrape_index.page.each do |a|
+    scrape_index_page.each do |a|
       MyAnimeList::Anime.new_from_index_page(a)
     end
   end

@@ -14,9 +14,9 @@ class MyAnimeList::Anime
     parsed_anime_info = anime_info.split(/\n/)
     self.new(
       a.css("div.detail div.di-ib.clearfix a.hoverinfo_trigger.fl-l.fs14.fw-b").text,
-      parsed_info[0],
-      parsed_info[1].strip,
-      parsed_info[2].strip,
+      parsed_anime_info[0],
+      parsed_anime_info[1].strip,
+      parsed_anime_info[2].strip,
       a.css("div.detail div.di-ib.clearfix a.hoverinfo_trigger.fl-l.fs14.fw-b")[0].attributes["href"].value
     )
   end
@@ -24,10 +24,14 @@ class MyAnimeList::Anime
   def initialize(name=nil, show_length=nil, time_aired=nil, members_watched=nil, url=nil)
     @name = name
     @show_length = url
-    @time_aired = location
-    @members_watched = position
+    @time_aired = time_aired
+    @members_watched = members_watched
     @url = url
     @@all << self
+  end
+
+  def self.all
+    @@all
   end
 
   def doc
