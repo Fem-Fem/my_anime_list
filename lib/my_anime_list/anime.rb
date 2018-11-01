@@ -57,43 +57,52 @@ class MyAnimeList::Anime
   end
 
   def genres
-      genres = ""
-      genres_rough_info = doc.css('div')[1].children.children.children.to_s.split(/genres|.setCollapse/)
-      genres_rough_info.each do |example|
-        if example[0..4] == "\", [\""
-          genres = example
-        end
-      end
-      @genres = genres[4..200].gsub(/\",\"/, ", ")[1..-4]
+    @genres = genres_finder
   end
 
   def description
-      name = doc.at("//span[@itemprop = 'description']").children.text.split(/\n|\"|\r/)
-      final_description = ""
-      name.each do |description|
-        if description != "" && description != "[Written by MAL Rewrite]"
-          if description.include? "\u2014"
-            array = description.split(/\u2014/)
-            word = ""
-            array.each do |phrase|
-              if word == ""
-                word = word + " " + phrase
-              else
-                word = word + " - " + phrase
-              end
-            end
-            if final_description == ""
-              final_description = final_description + word.strip
+    @description = description_finder
+  end
+
+  def genres_finder
+    genres = ""
+    genres_rough_info = doc.css('div')[1].children.children.children.to_s.split(/genres|.setCollapse/)
+    genres_rough_info.each do |example|
+      if example[0..4] == "\", [\""
+        genres = example
+      end
+    end
+    @genres = genres[4..200].gsub(/\",\"/, ", ")[1..-4]
+  end
+
+  def description_finder
+    name = doc.at("//span[@itemprop = 'description']").children.text.split(/\n|\"|\r/)
+    final_description = ""
+    name.each do |description|
+      if description != "" && description != "[Written by MAL Rewrite]"
+        if description.include? "\u2014"
+          array = description.split(/\u2014/)
+          word = ""
+          array.each do |phrase|
+            if word == ""
+              word = word + " " + phrase
             else
-              final_description = final_description + " " + word.strip
+              word = word + " - " + phrase
             end
-          elsif final_description == ""
-            final_description = final_description + description.strip
-          else
-            final_description = final_description + " " + description.strip
           end
+          if final_description == ""
+            final_description = final_description + word.strip
+          else
+            final_description = final_description + " " + word.strip
+          end
+        elsif final_description == ""
+          final_description = final_description + description.strip
+        else
+          final_description = final_description + " " + description.strip
         end
       end
-      @summary = final_description
+    end
+    @summary = final_description
   end
+
 end
