@@ -48,10 +48,20 @@ class MyAnimeList::CLI
     limit = gets.strip.to_i
     @@all.each.with_index(1) do |show, i|
       if i <= limit
-        puts "#{i}. #{show.name}; Show Popularity: #{show.members_watched}; Show Length: #{show.time_aired}; Show Length: #{show.show_length}"
+        puts "#{i}. #{show.name}; Show Popularity: #{show.members_watched}; Show Time Aired: #{show.time_aired}; Show Length: #{show.show_length}"
       end
     end
     menu
+  end
+
+  def number_helper(input)
+    if input > 50
+      return false
+    elsif input <= 0
+      return false
+    else
+      return true
+    end
   end
 
   def menu
@@ -59,19 +69,14 @@ class MyAnimeList::CLI
     puts "You can also enter 'list' to see the list again, or 'exit' to exit."
     input = gets.strip.downcase
     binding.pry
-    if input.class == Float
-      # make function for valid number?
-      if input.to_i <= 50
-        puts "Name: #{@@anime[input.to_i - 1].name}"
-        puts "Genres: #{@@anime[input.to_i - 1].genres}"
-        puts "\n"
-        puts "Description: #{@@anime[input.to_i - 1].description}"
-        puts "\n"
-        open_in_broswer(@@anime[input.to_i - 1].url)
-        menu
-      else
-        re_list_anime
-      end
+    if (input.to_i <= 50) && (input.to_i > 0)
+      puts "Name: #{@@anime[input.to_i - 1].name}"
+      puts "Genres: #{@@anime[input.to_i - 1].genres}"
+      puts "\n"
+      puts "Description: #{@@anime[input.to_i - 1].description}"
+      puts "\n"
+      open_in_broswer(@@anime[input.to_i - 1].url)
+      menu
     elsif input == "list"
       re_list_anime
     elsif input == "exit"
