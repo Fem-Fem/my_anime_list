@@ -6,7 +6,7 @@ class MyAnimeList::Anime
 
   @@all = []
 
-  attr_accessor :name, :show_length, :time_aired, :members_watched, :ranking, :url, :description, :rating, :genres
+  attr_accessor :name, :show_length, :time_aired, :members_watched, :ranking, :url, :description, :genres
 
   def self.today(anime_detailed_info)
     anime_detailed_info.each do |anime_show_or_movie|
