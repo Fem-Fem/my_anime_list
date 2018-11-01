@@ -43,19 +43,19 @@ class MyAnimeList::Anime
   end
 
   def genres
-      genre = ""
+      genres = ""
       rough_info = doc.css('div')[1].children.children.children.to_s
-      genre_rough_info = rough_info.split(/genres|.setCollapse/)
-      genre_rough_info.each do |example|
+      genres_rough_info = rough_info.split(/genres|.setCollapse/)
+      genres_rough_info.each do |example|
         if example[0..4] == "\", [\""
-          genre = example
+          genres = example
         end
       end
       # make method?
-      genre = genre[4..200]
-      genre = genre.gsub(/\",\"/, ", ")
-      genre = genre[1..200]
-      genre = genre[0..-4]
+      binding.pry
+      genres = genres[4..200].gsub(/\",\"/, ", ")
+      genres = genres[1..200]
+      genres = genres[0..-4]
       genres = genre
       @genres = genres
   end
